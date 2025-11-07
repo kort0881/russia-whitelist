@@ -1,12 +1,34 @@
+# Актуальный белый список РФ (Минцифры, ноябрь 2025)
+# Обновляйте через PR! Источники: gogov.ru, operator logs
+
+# Основные
 yandex.ru
 ya.ru
 vk.com
 mail.ru
+ok.ru
+
+# Госуслуги и финансы
 gosuslugi.ru
 tinkoff.ru
 sber.ru
+alfa-bank.ru
+gazprombank.ru
+
+# Маркетплейсы и авто
 ozon.ru
 wildberries.ru
 avito.ru
 drom.ru
 cian.ru
+
+# Региональные/другие
+mos.ru
+spb.ru
+russianpost.ru
+nalog.gov.ru
+
+# CDN/поддомены (для маскировки)
+yandex.net
+vkuserlive.com
+mail.ru:443  # с портом для Reality
