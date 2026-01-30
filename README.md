@@ -1,3 +1,7 @@
+# 🇷🇺 Russia Whitelist - Мобильные сети
+
+![Stars](https://img.shields.io/github/stars/kort0881/russia-whitelist?style=flat-square) ![License](https://img.shields.io/github/license/kort0881/russia-whitelist?style=flat-square) ![Updated](https://img.shields.io/github/last-commit/kort0881/russia-whitelist?style=flat-square)
+
 # - ⚖️ **Автор не призывает к нарушению закона** и 🚫 **не обучает обходу ограничений**  
 - 📄 **Все данные получены легально**  
 - ℹ️ **Материал предназначен только для ознакомления**  
