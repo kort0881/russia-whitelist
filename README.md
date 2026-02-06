@@ -30,7 +30,7 @@
 
 | Раздел | Ссылка |
 |-------|--------|
-| Обсуждения (форум) | [Discussions](#) |
+| Обсуждения (форум) | [Discussions](https://github.com/kort0881/russia-whitelist/discussions) |
 | Актуальный whitelist | [`whitelist.txt`](./whitelist.txt) |
 | Рабочие конфиги | [`configs/`](./configs/) |
 | Гайды по обходу | [`guides/vps-reality-setup.md`](./guides/vps-reality-setup.md) |
@@ -39,8 +39,8 @@
 
 ## Как участвовать
 
-1. **Задавайте вопросы** в [Discussions → Q&A]  
-2. **Делитесь конфигами** в [Show and tell]  
+1. **Задавайте вопросы** в [Discussions → Q&A](https://github.com/kort0881/russia-whitelist/discussions/categories/q-a)  
+2. **Делитесь конфигами** в [Show and tell](https://github.com/kort0881/russia-whitelist/discussions/categories/show-and-tell)  
 3. **Обновляйте списки** — делайте Pull Request  
 
 ---
@@ -53,5 +53,5 @@
 
 ---
 
-> **Обновлено: 07.11.2025**  
-> ⭐ **Стартуйте обсуждение — нажмите "New discussion" выше!**
+> **Обновлено: 06.02.2026**  
+> ⭐ **Стартуйте обсуждение — нажмите "Discussions" выше!**
