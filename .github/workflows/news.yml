@@ -1,0 +1,59 @@
+name: news-notes
+
+# Заметка по новостям о белых списках, шатдаунах, DPI и профильных репозиториях.
+# С ключом GROQ_API_KEY (GitHub → Settings → Secrets and variables → Actions) заметку пишет LLM
+# через api.groq.com (бесплатный тариф, модель openai/gpt-oss-120b).
+# Без ключа собирается экстрактивный дайджест: заголовки и ссылки, без анализа.
+
+on:
+  schedule:
+    - cron: "40 4 * * *"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Сколько материалов брать"
+        required: false
+        default: "12"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news-notes
+  cancel-in-progress: true
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Собрать заметку
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          NEWS_MODEL: ${{ vars.NEWS_MODEL || 'openai/gpt-oss-120b' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          LIMIT="${{ github.event.inputs.limit || '12' }}"
+          python3 scripts/news_digest.py --limit "$LIMIT" --out "notes/$(date -u +%F).md"
+
+      - name: Показать результат
+        run: head -40 "notes/$(date -u +%F).md"
+
+      - name: Коммит заметки
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add notes
+          if git diff --cached --quiet; then
+            echo "нечего коммитить"
+            exit 0
+          fi
+          git commit -m "docs(news): заметка за $(date -u +%F)"
+          git push

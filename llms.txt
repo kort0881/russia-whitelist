@@ -1,0 +1,34 @@
+# Russia Whitelist — russia-whitelist
+
+> Справочный репозиторий о белых списках (whitelist) мобильного интернета России: домены и SNI, CIDR-подсети и IP
+> операторов, инструмент проверки (tools/wlcheck.py), гайды по схемам доступа и их ограничениям в 2026 году.
+> Ключевые факты: фильтр бывает только по SNI, только по IP, либо по обоим сразу; Cloudflare практически
+> отсутствует в списках операторов; устойчивая схема — двухзвенный релей (клиент → хоп с «белым» IP → зарубежный
+> выход). Данные обновляются автоматически, источник и дата указаны в шапке файлов.
+
+## Данные
+
+- [whitelist.txt](https://raw.githubusercontent.com/kort0881/russia-whitelist/main/whitelist.txt): домены (SNI), которые встречаются в белых списках операторов, формат домен:порт
+- [data/upstream/cidrwhitelist.txt](https://raw.githubusercontent.com/kort0881/russia-whitelist/main/data/upstream/cidrwhitelist.txt): подсети в CIDR-нотации, объединённый список сообщества (источник hxehex/russia-mobile-internet-whitelist, MIT)
+- [data/upstream/ipwhitelist.txt](https://raw.githubusercontent.com/kort0881/russia-whitelist/main/data/upstream/ipwhitelist.txt): отдельные разрешённые IP-адреса, по одному на строку
+- [data/upstream/whitelist-domains-upstream.txt](https://raw.githubusercontent.com/kort0881/russia-whitelist/main/data/upstream/whitelist-domains-upstream.txt): доменный список сообщества, исходный формат
+
+## Инструменты
+
+- [tools/wlcheck.py](https://github.com/kort0881/russia-whitelist/blob/main/tools/wlcheck.py): проверка IP или домена по спискам, Python 3.8+, без зависимостей, вывод в текст или JSON (--json)
+- [tools/install-reality.sh](https://github.com/kort0881/russia-whitelist/blob/main/tools/install-reality.sh): установка Xray + VLESS Reality с проверкой конфига перед запуском
+
+## Документация
+
+- [guides/vps-reality-setup.md](https://github.com/kort0881/russia-whitelist/blob/main/guides/vps-reality-setup.md): VPS + Xray VLESS Reality с нуля, шаги и проверки
+- [guides/check-whitelist.md](https://github.com/kort0881/russia-whitelist/blob/main/guides/check-whitelist.md): как проверить домен и IP по спискам операторов
+- [guides/whitelisted-hosting.md](https://github.com/kort0881/russia-whitelist/blob/main/guides/whitelisted-hosting.md): выбор хостинга и CDN с «белыми» адресами
+- [guides/two-hop-relay.md](https://github.com/kort0881/russia-whitelist/blob/main/guides/two-hop-relay.md): двухзвенный релей под режим IP+SNI
+- [guides/clients.md](https://github.com/kort0881/russia-whitelist/blob/main/guides/clients.md): клиенты и импорт vless-ссылок
+- [guides/myths.md](https://github.com/kort0881/russia-whitelist/blob/main/guides/myths.md): что не работает и почему
+
+## Optional
+
+- [README.md](https://github.com/kort0881/russia-whitelist/blob/main/README.md): полное описание репозитория и FAQ
+- [Discussions](https://github.com/kort0881/russia-whitelist/discussions): вопросы, конфиги, опыт по регионам и операторам
+- [notes/](https://github.com/kort0881/russia-whitelist/tree/main/notes): заметки по новостям и изменениям правил

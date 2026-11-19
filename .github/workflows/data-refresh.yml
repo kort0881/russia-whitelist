@@ -1,0 +1,73 @@
+name: data-refresh
+
+# Ежедневно обновляет публичные списки в data/upstream/ (источник: hxehex/russia-mobile-internet-whitelist, MIT).
+
+on:
+  schedule:
+    - cron: "25 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-refresh
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Скачать списки и обновить шапки
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p data/upstream
+          SRC="https://raw.githubusercontent.com/hxehex/russia-mobile-internet-whitelist/main"
+          SHA="$(gh api repos/hxehex/russia-mobile-internet-whitelist/commits --jq '.[0].sha[0:12]' 2>/dev/null || echo unknown)"
+          TODAY="$(date -u +%Y-%m-%d)"
+
+          fetch() {  # $1 = имя в источнике, $2 = имя у нас
+            tmp="$(mktemp)"
+            if curl -fsS --max-time 60 "$SRC/$1" -o "$tmp"; then
+              {
+                echo "# Источник: hxehex/russia-mobile-internet-whitelist (лицензия MIT)"
+                echo "# Снимок: $TODAY, коммит источника: $SHA"
+                echo "# Обновляется автоматически: .github/workflows/data-refresh.yml"
+                cat "$tmp"
+              } > "data/upstream/$2"
+              echo "ok: $2 ($(wc -l < "data/upstream/$2") строк)"
+            else
+              echo "::warning::не удалось скачать $1 — файл data/upstream/$2 не изменён"
+            fi
+            rm -f "$tmp"
+          }
+
+          fetch cidrwhitelist.txt cidrwhitelist.txt
+          fetch ipwhitelist.txt ipwhitelist.txt
+          fetch whitelist.txt whitelist-domains-upstream.txt
+
+      - name: Проверка результата
+        run: |
+          set -euo pipefail
+          for f in data/upstream/cidrwhitelist.txt data/upstream/ipwhitelist.txt data/upstream/whitelist-domains-upstream.txt; do
+            [ -s "$f" ] || { echo "::error::$f пустой"; exit 1; }
+            head -3 "$f"
+          done
+          python3 tools/wlcheck.py --ip 8.8.8.8 || true
+
+      - name: Коммит при изменениях
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/upstream; then
+            echo "изменений нет"
+            exit 0
+          fi
+          git add data/upstream
+          git commit -m "chore(data): обновление списков $(date -u +%Y-%m-%d)"
+          git push
