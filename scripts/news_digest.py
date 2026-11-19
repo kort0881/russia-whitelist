@@ -29,12 +29,12 @@ TIMEOUT = 25
 UA = "russia-whitelist-news/1.0 (+https://github.com/kort0881/russia-whitelist)"
 
 NEWS_QUERIES = [
-    "белые списки мобильный интернет",
-    "шатдаун мобильного интернета Россия",
-    "Роскомнадзор блокировка VPN",
-    "ТСПУ DPI блокировка трафика",
-    "VPN Россия блокировка 2026",
-    "russia whitelist mobile internet shutdown",
+    "белые списки мобильный интернет when:30d",
+    "шатдаун мобильного интернета Россия when:30d",
+    "Роскомнадзор блокировка VPN when:30d",
+    "ТСПУ DPI блокировка трафика when:30d",
+    "VPN Россия блокировка when:30d",
+    "russia whitelist mobile internet shutdown when:30d",
 ]
 
 HABR_FEED = "https://habr.com/ru/rss/news/?fl=ru"
@@ -247,6 +247,19 @@ def extractive_note(items: list) -> str:
 
 # --- вывод ----------------------------------------------------------------
 
+def is_fresh(item: dict, days: int) -> bool:
+    """Материал не старше days суток. Если дату разобрать не удалось — считаем свежим."""
+    raw = item.get("published") or ""
+    try:
+        from email.utils import parsedate_to_datetime
+        d = parsedate_to_datetime(raw)
+        if d.tzinfo is None:
+            d = d.replace(tzinfo=dt.timezone.utc)
+        return (dt.datetime.now(dt.timezone.utc) - d).days <= days
+    except Exception:  # noqa: BLE001 — формат даты у источников разный
+        return True
+
+
 def render(items: list, note: str, model: str | None, limit: int) -> str:
     today = dt.date.today().isoformat()
     head = [
@@ -263,12 +276,13 @@ def render(items: list, note: str, model: str | None, limit: int) -> str:
         "Автоматическая заметка. Ссылки ведут на первоисточники; проверяйте дату публикации.",
         "Данные о белых списках — в [`whitelist.txt`](../whitelist.txt) и [`data/upstream/`](../data/upstream).",
     ]
-    return "\n".join(head) + note + "\n" + "\n".join(tail) + "\n"
+    return "\n".join(head) + "\n" + note + "\n" + "\n".join(tail) + "\n"
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Заметка по новостям о белых списках и VPN-протоколах")
     ap.add_argument("--limit", type=int, default=12, help="сколько материалов брать (по умолчанию 12)")
+    ap.add_argument("--days", type=int, default=45, help="брать новости не старше N суток (по умолчанию 45)")
     ap.add_argument("--out", help="путь к markdown-файлу; по умолчанию notes/<дата>.md")
     ap.add_argument("--model", default=os.environ.get("NEWS_MODEL", "openai/gpt-oss-120b"),
                     help="модель LLM (по умолчанию openai/gpt-oss-120b на api.groq.com)")
@@ -277,6 +291,7 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     items = news_from_google(args.limit) + news_from_habr(args.limit) + repos_from_github(6)
+    items = [i for i in items if i["kind"] != "news" or is_fresh(i, args.days)]
     items = items[: args.limit + 6]
 
     if args.json:
