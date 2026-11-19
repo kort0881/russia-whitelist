@@ -16,6 +16,7 @@
 - 📚 Гайды: [`guides/`](./guides)
 - 💬 Форум — Q&A, конфиги, опыт по регионам: [Discussions](https://github.com/kort0881/russia-whitelist/discussions)
 - 🤖 Выжимка для ИИ-поисковиков и агентов: [`llms.txt`](./llms.txt)
+- 📢 Что изменилось в ноябре 2026: [объявление в Discussions](https://github.com/kort0881/russia-whitelist/discussions/30)
 
 ---
 
@@ -240,8 +241,9 @@ Pull request в `whitelist.txt` или в `data/`, либо тема в [Discuss
 
 1. **Вопросы и диагностика** — [Discussions → Q&A](https://github.com/kort0881/russia-whitelist/discussions/categories/q-a).
 2. **Рабочие конфиги и опыт по регионам** — [Show and tell](https://github.com/kort0881/russia-whitelist/discussions/categories/show-and-tell).
-3. **Данные** — PR в [`whitelist.txt`](./whitelist.txt) или `data/`: домен, подсеть, оператор, регион, дата проверки.
-4. **Гайды** — PR в `guides/`: только проверяемые шаги и команды, без «должно работать».
+3. **Что нового в репозитории** — [объявление: ноябрь 2026](https://github.com/kort0881/russia-whitelist/discussions/30).
+4. **Данные** — PR в [`whitelist.txt`](./whitelist.txt) или `data/`: домен, подсеть, оператор, регион, дата проверки.
+5. **Гайды** — PR в `guides/`: только проверяемые шаги и команды, без «должно работать».
 
 Правила простые: указывайте источник и дату проверки, не публикуйте чужие ключи, токены и адреса серверов.
 
