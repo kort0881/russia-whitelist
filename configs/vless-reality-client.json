@@ -1,9 +1,11 @@
 {
+  "log": { "loglevel": "warning" },
   "inbounds": [
     {
+      "listen": "127.0.0.1",
       "port": 1080,
       "protocol": "socks",
-      "listen": "127.0.0.1"
+      "settings": { "udp": true }
     }
   ],
   "outbounds": [
@@ -12,11 +14,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "your-vps-ip",
+            "address": "АДРЕС-СЕРВЕРА",
             "port": 443,
             "users": [
               {
-                "id": "your-uuid-here",
+                "id": "UUID-КЛИЕНТА",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -28,13 +30,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "show": false,
-          "dest": "www.yandex.ru:443",
-          "xver": 0,
-          "serverNames": ["www.yandex.ru"],
-          "privateKey": "your-private-key",
-          "publicKey": "your-public-key",
-          "shortIds": ["a1b2c3"]
+          "serverName": "www.microsoft.com",
+          "publicKey": "ПУБЛИЧНЫЙ-КЛЮЧ-REALITY",
+          "shortId": "SHORTID-СЕРВЕРА",
+          "fingerprint": "chrome"
         }
       }
     }

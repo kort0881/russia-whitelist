@@ -1,0 +1,51 @@
+{
+  "_комментарий": "Вход двухзвенного релея: клиентский инбаунд + аутбаунд на зарубежный выход. См. guides/two-hop-relay.md",
+  "log": { "loglevel": "warning" },
+  "inbounds": [
+    {
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [{ "id": "UUID-КЛИЕНТА", "flow": "xtls-rprx-vision" }],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "ДОМЕН-ДОНОРА:443",
+          "serverNames": ["ДОМЕН-ДОНОРА"],
+          "privateKey": "ПРИВАТНЫЙ-КЛЮЧ-ВХОДА",
+          "shortIds": ["SHORTID-ВХОДА"]
+        }
+      },
+      "sniffing": { "enabled": true, "destOverride": ["http", "tls"] }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "tag": "exit",
+      "settings": {
+        "vnext": [
+          {
+            "address": "АДРЕС-ВЫХОДА",
+            "port": 443,
+            "users": [{ "id": "UUID-КЛИЕНТА", "encryption": "none", "flow": "xtls-rprx-vision" }]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "SNI-ВЫХОДА",
+          "publicKey": "ПУБЛИЧНЫЙ-КЛЮЧ-ВЫХОДА",
+          "shortId": "SHORTID-ВЫХОДА",
+          "fingerprint": "chrome"
+        }
+      }
+    },
+    { "protocol": "blackhole", "tag": "block" }
+  ]
+}
