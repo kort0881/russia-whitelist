@@ -1,5 +1,5 @@
 # Источник: hxehex/russia-mobile-internet-whitelist (лицензия MIT)
-# Снимок: 2026-11-25, коммит источника: fad3653ebd4b
+# Снимок: 2026-11-26, коммит источника: fad3653ebd4b
 # Обновляется автоматически: .github/workflows/data-refresh.yml
 00.img.avito.st
 01.img.avito.st
